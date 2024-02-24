@@ -38,33 +38,45 @@
                     :class="{ titleActive: clickTitle === 'parents' }"
                     >Predict from parents'photos</a
                   >
-                  <a
+                  <!-- <a
                     @click="() => GenerateType('3D')"
                     :class="{ titleActive: clickTitle === '3D' }"
                     >Predict from 3D ultrasound imaging</a
-                  >
-                  <img
+                  > -->
+                  <!-- <img
                     @click="emitToParent"
                     class="title-close"
                     src="../assets/imge/fenge.png"
                     alt=""
-                  />
+                  /> -->
+                  <div class="title_close_"  @click="emitToParent"><svg t="1708777809338" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4226" width="20" height="20"><path d="M550.848 502.496L859.488 193.6a31.968 31.968 0 1 0-45.248-45.248L505.632 457.248 196.992 148.32a31.968 31.968 0 1 0-45.248 45.248l308.64 308.896-308.64 308.896a31.968 31.968 0 1 0 45.248 45.248l308.64-308.896L814.24 856.608a31.968 31.968 0 1 0 45.248-45.248l-308.64-308.864z" fill="#333333" p-id="4227"></path></svg></div>
                 </div>
-                <p v-if="isVisible" class="message">请先上传图片</p>
+                <p v-if="isVisible" class="message">
+                  Please upload pictures first!
+                </p>
 
                 <hr />
-
+                <div v-if="father_example" class="example_photo"></div>
+                <p class="text-center mt-5 prompt_p">
+                  Please upload a clear, front-facing photo.
+                  <span
+                    class="view_example"
+                    @click="() => handle_example_photo(true)"
+                    >View example.</span
+                  >
+                </p>
                 <div class="module-container" v-if="clickTitle === 'parents'">
                   <!-- 右侧 -->
-                  <div class="module-left" >
-                    <div v-if="father_example" class="example_photo"></div>
-                    <label class="label" for="fa">
-                      <img
-                        v-if="fatherPhotoUrl"
-                        :src="fatherPhotoUrl"
-                        class="uploaded-photo"
-                        alt="Father's photo"
-                      />
+                  <div class="module-left">
+                    <label
+                      class="label"
+                      :class="{ fatherPhoto: fatherPhotoUrl }"
+                      :style="{
+                        backgroundImage: `url(${show_parents_photo.father_iamge})`,
+                      }"
+                      for="fa"
+                    >
+                      <div v-if="father_example" class="example_photo"></div>
                       <img
                         v-if="!fatherPhotoUrl"
                         class="module-left-img"
@@ -81,8 +93,7 @@
                       />
                     </label>
 
-                    <div class="photoText" >
-                      
+                    <div class="photoText">
                       👨🏻 Father's photo
                       <img
                         v-if="uploadData.fatherPhoto"
@@ -95,9 +106,13 @@
                   </div>
 
                   <div class="module-x" v-if="!isLoading"></div>
-                  <div v-else class="mask-layer">
+
+                  
+                  <div v-show="isLoading" class="mask-layer">
                     <h2>Baby photos are being generated ...</h2>
                     <Loading />
+                    <Progress  ref="progressBar"/>
+
                     <div class="tips-box">
                       <h3 v-if="isLoading">Do you know?</h3>
                       <p v-if="isLoading">
@@ -106,23 +121,30 @@
                     </div>
                     <button
                       type="button"
-                      @click="() => (isLoading = false)"
+                      @click="handleCancel"
                       class="Cancel Generate-button"
                     >
-                      Cancel
+                      Cancel 
                     </button>
                   </div>
 
                   <!-- 左侧 -->
                   <div class="module-right">
                     <div v-if="father_example" class="example_photo_"></div>
-                    <label class="label" for="ma">
-                      <img
+                    <label
+                      class="label"
+                      for="ma"
+                      :class="{ matherPhoto: motherPhotoUrl }"
+                      :style="{
+                        backgroundImage: `url(${show_parents_photo.mather_iamge})`,
+                      }"
+                    >
+                      <!-- <img
                         v-if="motherPhotoUrl"
                         :src="motherPhotoUrl"
                         class="uploaded-photo"
                         alt="Mother's photo"
-                      />
+                      /> -->
                       <img
                         v-if="!motherPhotoUrl"
                         class="module-left-img"
@@ -150,17 +172,42 @@
                     </div>
                   </div>
 
-                  <div class="success-box" v-if="isSuccess">
-                    <img
-                    @click="emitToParent"
-                    class="title-close_"
-                    src="../assets/imge/fenge.png"
-                    alt=""
-                  />
+                  <div class="success-box" :style="`visibility: ${isSuccess?'visible':'hidden'};`">
+                    <!-- <img
+                      @click="emitToParent_"
+                      class="title-close_"
+                      src="../assets/imge/fenge.png"
+                      alt=""
+                    /> -->
+                    <div  class="title_close__"  @click="emitToParent_"> <svg t="1708777809338" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4226" width="20" height="20"><path d="M550.848 502.496L859.488 193.6a31.968 31.968 0 1 0-45.248-45.248L505.632 457.248 196.992 148.32a31.968 31.968 0 1 0-45.248 45.248l308.64 308.896-308.64 308.896a31.968 31.968 0 1 0 45.248 45.248l308.64-308.896L814.24 856.608a31.968 31.968 0 1 0 45.248-45.248l-308.64-308.864z" fill="#333333" p-id="4227"></path></svg></div>
+                    
                     <h4>🎉Generated successfully!</h4>
+                    <p>You can download it later from My Orders!</p>
                     <img :src="generateBabyImage" alt="" />
-                    <button type="button" class="Generate-button" @click="()=>downloadImageAsBlob(generateBabyImage)">
+                    <button
+                      type="button"
+                      class="Generate-button"
+                      @click="
+                        () => downloadImageAsBlob(generateBabyImage_download)
+                      "
+                    >
                       Download photos
+                    </button>
+                  </div>
+
+                  <div class="example-box" v-if="isExample">
+                    <h4>Please upload a photo similar to the example below!</h4>
+                    <img
+                      class="example-img"
+                      src="../assets/imge/_11.jpg"
+                      alt=""
+                    />
+                    <button
+                      type="button"
+                      class="Generate-button"
+                      @click="() => handle_example_photo(false)"
+                    >
+                      OK
                     </button>
                   </div>
                 </div>
@@ -207,10 +254,10 @@
                     </div>
                     <button
                       type="button"
-                      @click="() => (isLoading = false)"
+                      @click="handleCancel"
                       class="Cancel Generate-button"
                     >
-                      Cancel
+                      Cancel 
                     </button>
                   </div>
                   <!-- 左侧 -->
@@ -249,7 +296,27 @@
                   </div>
                 </div>
               </div>
+              <div class="gender-box">
+                Please select the desired gender of your baby
+                <div class="radio-group">
+                  <input
+                    type="radio"
+                    id="male"
+                    value="male"
+                    v-model="selectedGender"
+                  />
+                  <label for="male">Boy</label>
 
+                  <input
+                    type="radio"
+                    id="female"
+                    value="female"
+                    v-model="selectedGender"
+                  />
+                  <label for="female">Girl</label>
+                </div>
+                <!-- <p>选中的性别是：{{ selectedGender }}</p> -->
+              </div>
               <div class="button-box">
                 <button
                   type="button"
@@ -258,7 +325,7 @@
                 >
                   Generate
                 </button>
-                <div class="example_btn" @mouseenter=" ()=>handle_example_photo(true,'father')" @mouseleave="handle_example_photo(false,'father')"></div>
+                <!-- <div class="example_btn"></div> -->
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -269,9 +336,19 @@
 </template>
   
   <script setup>
-import { ref, reactive, watchEffect, defineProps, watch, onMounted } from "vue";
+import {
+  ref,
+  reactive,
+  watchEffect,
+  defineProps,
+  watch,
+  onMounted,
+  getCurrentInstance,
+} from "vue";
 import localForage from "localforage";
 import Loading from "./Loading.vue";
+import Progress from "./Progress.vue";
+import Toast from "./toastService.js"; // 路径根据实际情况调整
 import {
   Dialog,
   DialogPanel,
@@ -283,23 +360,26 @@ import { CheckIcon } from "@heroicons/vue/24/outline";
 import {
   fetchAndStoreImageData,
   resizeImageToMaxSize,
+  // handleFileChange_
 } from "../tools/toolsFun.js";
 const open = ref(true);
 const props = defineProps({
   moduleOpen: Boolean,
   moduleType: String,
 });
-
+const progressBar = ref(null);
+const selectedGender = ref("male");
 const fatherPhotoUrl = ref(null);
 const motherPhotoUrl = ref(null);
 const sanDPhotoUrl = ref(null);
 const isSuccess = ref(false);
 const clickTitle = ref(props.moduleType);
 const isLoading = ref(false);
+const isExample = ref(false);
 const uploadData = reactive({
-  fatherPhoto: null,
-  matherPhoto: null,
-  threePhoto: null,
+  fatherPhoto: "",
+  matherPhoto: "",
+  threePhoto: "",
 });
 
 const fatherColor = reactive([
@@ -348,20 +428,43 @@ const babyCareTips = reactive([
 ]);
 const currentTip = ref(""); // 当前显示的提示
 const parentsColor = reactive({ fatherColor: "", matherColor: "" });
+const show_parents_photo = reactive({ father_iamge: "", mather_iamge: "" });
 
-const generateBabyImage = ref('');
+const generateBabyImage = ref("");
+const generateBabyImage_download = ref("");
 const _generateType = ref(null);
 const isVisible = ref(false);
-const father_example= ref(false);
-const mather_example= ref(false);
+const father_example = ref(false);
+const mather_example = ref(false);
+const instance = getCurrentInstance();
+//const progressStart = ref(false);
 
+const currentFetch= ref(null);
 // 定义可以发射的事件
 const emit = defineEmits(["child-event_"]);
 // 方法用于发射事件
 function emitToParent() {
+  isSuccess.value = false;
+  uploadData.fatherPhoto = "";
+  uploadData.matherPhoto = "";
+  uploadData.threePhoto = "";
+  show_parents_photo.father_iamge = "";
+  show_parents_photo.mather_iamge = "";
+  fatherPhotoUrl.value = "";
+  motherPhotoUrl.value = "";
   emit("child-event_", "Message from Child to Parent");
 }
-
+function emitToParent_() {
+  isSuccess.value = false;
+  uploadData.fatherPhoto = "";
+  uploadData.matherPhoto = "";
+  uploadData.threePhoto = "";
+  show_parents_photo.father_iamge = "";
+  show_parents_photo.mather_iamge = "";
+  fatherPhotoUrl.value = "";
+  motherPhotoUrl.value = "";
+  emitToParent();
+}
 // 设置激活的<span>的函数
 const setActive = (color, parents) => {
   if (parents === "mather") {
@@ -390,22 +493,27 @@ function getRandomTip() {
 //上传图片处理
 const handleFileChange = async (event, parent) => {
   const file = event.target.files[0];
+  if (!file) {
+    return;
+  }
   try {
     const resizedBase64 = await resizeImageToMaxSize(file);
-    if (!file) {
-      return;
-    }
+    const show_iamge = URL.createObjectURL(file);
     const url = URL.createObjectURL(file);
     if (parent === "father") {
       fatherPhotoUrl.value = url;
       uploadData.fatherPhoto = resizedBase64;
+      show_parents_photo.father_iamge = show_iamge;
     } else if (parent === "mother") {
       motherPhotoUrl.value = url;
       uploadData.matherPhoto = resizedBase64;
+      show_parents_photo.mather_iamge = show_iamge;
     } else if (parent === "threeD") {
       sanDPhotoUrl.value = url;
       uploadData.threePhoto = resizedBase64;
     }
+    // 清除文件输入字段，以便再次上传相同文件
+    event.target.value = "";
   } catch (error) {
     console.error("Error converting file to Base64:", error);
   }
@@ -422,31 +530,41 @@ const GenerateType = (type) => {
 
 //删除图片
 const handleDeleteImage = (type) => {
+  let url;
   if (type === "fa") {
+    url = fatherPhotoUrl.value;
     fatherPhotoUrl.value = null;
-    uploadData.fatherPhoto=null;
+    uploadData.fatherPhoto = null;
+    show_parents_photo.father_iamge = "";
   } else if (type === "mather") {
+    url = motherPhotoUrl.value;
     motherPhotoUrl.value = null;
-    uploadData.matherPhoto=null;
+    uploadData.matherPhoto = null;
+    show_parents_photo.mather_iamge = "";
   } else if (type === "threeD") {
+    url = threeDPhotoUrl.value;
     sanDPhotoUrl.value = null;
-    uploadData.threePhoto=null;
-
+    uploadData.threePhoto = null;
+  }
+  if (url) {
+    URL.revokeObjectURL(url);
   }
 };
 
 //生成函数
 const handleGenerate = async () => {
-  if(!uploadData.fatherPhoto&&!uploadData.matherPhoto){
-    isVisible.value=true
-    setTimeout(() => {
-    isVisible.value = false;
-  }, 3000);
-    return 
+  if (!uploadData.fatherPhoto && !uploadData.matherPhoto) {
+    //Toast.show("Please upload pictures first!+++++", { type: "error", duration: 3000 });
+    //"success","message",1000
+    alert('Please upload pictures first!+++++');
+    return;
   }
   getRandomTip();
   setInterval(getRandomTip, 5000);
   isLoading.value = true;
+  //progressStart.value = true;
+  const progressStartEvent=new CustomEvent('start-progress');
+  document.dispatchEvent(progressStartEvent);
   let data = null;
 
   if (clickTitle.value === "parents") {
@@ -455,24 +573,48 @@ const handleGenerate = async () => {
       uploadData.matherPhoto
     );
 
-    try {
-      const storageObject = {
-        url: data?.image_url,
-        id: data?.image_id,
-        father_base64: uploadData.fatherPhoto,
-        mather_base64: uploadData.matherPhoto,
-        generateType: _generateType.value,
-        timestamp: Date.now(), // 记录当前时间戳
-      };
-      generateBabyImage.value=data?.image_url
-      await fetchAndStoreImageData(storageObject);
-    } catch (error) {
-      console.error("获取数据失败", error);
+    if (data.error_code === 524) {
+      isLoading.value = false;
+      return Toast.show("请求错误,请稍后再次尝试", {
+        type: "error",
+        duration: 3000,
+      });
+    } else if (data.error_code === 0&&data.success) {
+      try {
+        const storageObject = {
+          url: replaceUrlDomain(data?.image_url),
+          id: data?.image_id,
+          father_base64: uploadData.fatherPhoto,
+          mather_base64: uploadData.matherPhoto,
+          generateType: _generateType.value,
+          timestamp: Date.now(), // 记录当前时间戳
+          downloadURL: data.raw_image_url,
+        };
+        generateBabyImage.value = storageObject.url;
+        generateBabyImage_download.value = storageObject.downloadURL;
+        const progressEndEvent=new CustomEvent('end-progress');
+        document.dispatchEvent(progressEndEvent);
+        setTimeout(()=>{
+          isLoading.value = false;
+        },1800);
+
+        await fetchAndStoreImageData(storageObject);
+      } catch (error) {
+        console.error("获取数据失败", error);
+      }
+      isSuccess.value = true;
+      uploadData.fatherPhoto = "";
+      uploadData.matherPhoto = "";
+      show_parents_photo.father_iamge = "";
+      show_parents_photo.mather_iamge = "";
+    } else {
+      isLoading.value = false;
+
+      return Toast.show("图片错误, 请上传正确的图片", {
+        type: "error",
+        duration: 3000,
+      });
     }
-    isLoading.value = false;
-    isSuccess.value=true;
-    uploadData.fatherPhoto=''
-    uploadData.matherPhoto=''
   } else if (_generateType.value === "3D") {
     data = await generateBaby_by_3D(parentsColor, uploadData.threePhoto);
   }
@@ -486,6 +628,10 @@ watch(
 );
 
 async function generateBaby_by_parents(imag1, imag2) {
+  const controller = new AbortController();
+  const signal = controller.signal;
+  currentFetch.value=controller
+
   const image_template = imag1.split("data:image/png;base64,")[1];
   const image_target = imag2.split("data:image/png;base64,")[1];
 
@@ -498,9 +644,12 @@ async function generateBaby_by_parents(imag1, imag2) {
       body: JSON.stringify({
         image_template,
         image_target,
+        gender: selectedGender.value,
       }),
+      signal
     });
     if (!response.ok) {
+      isLoading.value=false
       throw new Error("Network response was not ok");
     }
     const data = await response.json();
@@ -508,7 +657,9 @@ async function generateBaby_by_parents(imag1, imag2) {
     return data;
   } catch (error) {
     console.error("There was a problem with your fetch operation:", error);
-  }
+  } 
+  isLoading.value=false
+
 }
 async function generateBaby_by_3D(color, imag) {
   const image_target = imag.split("data:image/png;base64,")[1];
@@ -540,14 +691,13 @@ async function generateBaby_by_3D(color, imag) {
   }
 }
 
-
 //下载图片
 const downloadImageAsBlob = async (imageUrl) => {
   try {
     const response = await fetch(imageUrl);
     const blob = await response.blob(); // 将响应体转换为Blob对象
     const downloadUrl = window.URL.createObjectURL(blob); // 创建一个临时URL
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = downloadUrl;
     link.download = "downloaded_image.png"; // 指定下载文件名
     document.body.appendChild(link);
@@ -555,26 +705,30 @@ const downloadImageAsBlob = async (imageUrl) => {
     document.body.removeChild(link);
     window.URL.revokeObjectURL(downloadUrl); // 释放创建的临时URL
   } catch (error) {
-    console.error('下载图片失败', error);
+    console.error("下载图片失败", error);
   }
 };
 
-
-//示例图片函数
-const handle_example_photo=async(parameter,type)=>{
-  if(parameter&&type==='father'){
-    father_example.value=true
-    console.log('111');
-    
-  }else if(parameter&&type==='mather'){
-    mather_example.value=true
-  }else if(!parameter&&type==='father'){
-    father_example.value=false
-  }else if(!parameter&&type==='mather'){
-    mather_example.value=false
-  }
+const handle_example_photo = (value) => {
+  isExample.value = value;
+};
+function replaceUrlDomain(url) {
+  var newUrl = url.replace(
+    "https://midjourney.cdn.zhishuyun.com",
+    "https://midjourney2.cdn.zhishuyun.com"
+  );
+  return newUrl;
 }
 
+// 取消请求
+function handleCancel (params) {
+
+  isLoading.value=false
+
+  currentFetch.value.abort();
+  
+  
+}
 </script>
 
 
@@ -582,7 +736,7 @@ const handle_example_photo=async(parameter,type)=>{
 <style scoped>
 .title {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 20px;
   padding-bottom: 10px;
   font-weight: 200;
@@ -598,15 +752,16 @@ const handle_example_photo=async(parameter,type)=>{
   font-size: 16px;
 }
 
-.title-close,.title-close_ {
+.title-close,
+.title-close_ {
   width: 15px;
   height: 15px;
   position: absolute;
   right: 10px;
   cursor: pointer;
 }
-.title-close_{
-  width: 20px  !important;
+.title-close_ {
+  width: 20px !important;
   height: 20px;
   position: absolute;
   top: 20px;
@@ -622,9 +777,9 @@ const handle_example_photo=async(parameter,type)=>{
 }
 .module-container {
   display: flex;
-  height: 300px;
   justify-content: space-around;
   align-items: center;
+  margin: 20px 0;
 }
 
 .mask-layer {
@@ -668,27 +823,20 @@ const handle_example_photo=async(parameter,type)=>{
 }
 .module-left,
 .module-right {
-  width: 200px;
-  height: 200px;
-  border: 2px dashed #000;
-  border-radius: 10px;
-  background-color: #cdcbf8;
-  opacity: 0.8;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  cursor: pointer;
   transition: all 0.3s;
   position: relative;
 }
 .photoText {
-  position: absolute;
   bottom: -35px;
   width: 100%;
   height: 25px;
   display: flex;
   justify-content: space-around;
+  margin-top: 10px;
 }
 .photoText-image {
   width: 30px;
@@ -769,7 +917,6 @@ const handle_example_photo=async(parameter,type)=>{
   border-radius: 5px;
 }
 
-
 .active {
   outline: 2px solid #4f46e5;
 }
@@ -791,15 +938,25 @@ const handle_example_photo=async(parameter,type)=>{
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+  background-color: #cdcbf8;
+  border: 2px dashed #000;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.label:hover {
+  background-color: #c7c5f8;
 }
 
 .label > p {
   transform: translateY(30px);
 }
 
-.success-box {
+.success-box,
+.example-box {
   width: 100%;
   height: 100%;
   background-color: #fff;
@@ -820,45 +977,138 @@ const handle_example_photo=async(parameter,type)=>{
   font-weight: bold;
 }
 
-.message{
+.message {
   position: absolute;
-  top: 70px;
+  top: 100px;
   left: 0;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.message::before{
-  content: '';
+.message::before {
+  content: "";
   display: inline-block;
   width: 30px;
   height: 30px;
-  background-image: url('../assets/imge/hint.png');
+  background-image: url("../assets/imge/hint.png");
   background-size: contain;
   margin-right: 10px;
 }
 
-.example_photo,.example_photo_{
+.example_photo,
+.example_photo_ {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  background-image: url('../assets/imge/_father.png');
+  background-image: url("../assets/imge/_father.png");
+  background-repeat: no-repeat;
   z-index: 100;
   background-size: contain;
 }
-.example_photo_{
-  background-image: url('../assets/imge/_mather.png');
+.example_photo_ {
+  background-image: url("../assets/imge/_mather.png");
 }
 
-.example_btn{
+.example_btn {
   position: absolute;
   width: 30px;
   height: 30px;
   right: 40px;
-  background-image: url('../assets/imge/light.png');
+  background-image: url("../assets/imge/light.png");
   background-size: contain;
+}
+
+.prompt_p {
+  font-size: 13px;
+  color: #555;
+}
+
+.view_example {
+  color: #4f46e5;
+  cursor: pointer;
+}
+
+.example-img {
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+}
+
+.fatherPhoto.label {
+  border: none;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.matherPhoto.label {
+  border: none;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.gender-selector {
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.radio-group {
+  margin: 10px 0;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"] + label {
+  margin-right: 10px;
+  padding: 5px 20px;
+  background-color: #f2f2f2;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type="radio"]:checked + label {
+  background-color: #007bff;
+  color: white;
+}
+
+input[type="radio"] + label:hover {
+  background-color: #e2e2e2;
+}
+
+input[type="radio"]:checked + label:hover {
+  background-color: #0056b3;
+}
+
+.gender-box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.title_close_,.title_close__{
+  background-color: transparent; /* 初始背景颜色：透明 */
+  border: none; /* 无边框 */
+  cursor: pointer; /* 鼠标悬停时显示指针 */
+  font-size: 16px; /* 字体大小 */
+  padding: 10px; /* 内边距 */
+  color: black; /* 字体颜色 */
+  outline: none; /* 点击时无轮廓 */
+}
+.title_close_:hover,.title_close__:hover{
+  background-color: red; /* 鼠标悬停时背景变红 */
+  color: white; /* 鼠标悬停时字体颜色变白 */
+}
+
+.title_close__{
+  position: absolute;
+  right: 20px;
+  top: 20px;
 }
 </style>

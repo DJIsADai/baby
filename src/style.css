@@ -4,22 +4,23 @@
 
 .box3 {
     display: flex;
-    justify-content: space-between;
+    justify-content:center ;
     align-items: center;
     margin-top: 30px;
     /* width: 65vw; */
     background-color: #CDCBF8;
     padding: 40px;
     gap: 0 20px;
+    border-radius: 30px;
 }
 
 .parentsphotos {
     display: flex;
-    flex-flow: column;
-    justify-content: center;
+    /* flex-flow: column; */
+    justify-content: space-around;
     align-items: center;
     height: 100%;
-    width: 350px;
+    width: 100%;
     
 }
 
@@ -31,8 +32,9 @@
     height: 100%;
     width: 350px;
 }
-.Dphotos .imag{
-    padding: 13% 0;
+.imag{
+    /* padding: 13% 0; */
+    width: 350px;
 }
 
 
@@ -43,6 +45,9 @@
     padding: 0;
     line-height: 1.2;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .GenerateBtn {
@@ -56,6 +61,7 @@
     justify-content: center;
     transition: all 0.2s;
     cursor: pointer;
+    margin-top: 50px;
 
 }
 
@@ -63,8 +69,19 @@
     background-color: #4f46e5;
 }
 
-@media (max-width: 749px) {
-    .box3{
+
+@media (max-width: 680px) {
+    .parentsphotos{
         flex-direction: column;
     }
+  }
+
+  .toast_root{
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    /* background-color: #1b1b1b; */
+    transition: top ease 0.3s;
+    right: 50%;
+    transform: translateX(50%);
   }

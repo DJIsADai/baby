@@ -24,22 +24,19 @@
         Leveraging advanced technologies such as machine learning and deep
         neural networks, the Baby Generator combines genetic analysis, facial
         features, and inheritance patterns to enable predictions based on
-        parents’ photos or 3D ultrasound images.
+        parents’ photos.
       </p>
 
       <div class="box3">
         <div class="parentsphotos">
-          <!-- <div class="imag"></div> -->
           <img class="imag" src="./assets/imge/fmp@2x.png" alt="">
-
-          <h4 class="h4" >
-            Predict from<br />
-            parents' photos 
-          </h4>
-          <div class="GenerateBtn"    @click="()=>handleOpen_('parents')">Generate Now</div>
+          
+          <div class="h4" >
+            Predict from parents' photos 
+            <div class="GenerateBtn"    @click="()=>handleOpen_('parents')">Generate Now</div>
+          </div>
         </div>
-        <div class="Dphotos">
-          <!-- <div class="imag"></div> -->
+        <!-- <div class="Dphotos">
           <img class="imag" src="./assets/imge/3dp@2x.png" alt="">
 
           <h4 class="h4">
@@ -47,7 +44,7 @@
             3D ultrasound imaging
           </h4>
           <div class="GenerateBtn"    @click="()=>handleOpen_()">Generate Now</div>
-        </div>
+        </div> -->
       </div>
       <h2
         class="mt-10 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"

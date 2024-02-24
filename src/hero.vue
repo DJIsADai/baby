@@ -1,32 +1,32 @@
 <template>
     <div class="bg-white">
         <div class="relative isolate overflow-hidden bg-gradient-to-b from-indigo-100/20">
-            <div class="mx-auto mt-10 max-w-7xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:py-40">
+            <div class="mx-auto mt-10 max-w-6xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:py-40">
                 <div class="px-6 lg:px-0 lg:pt-4">
                     <div class="mx-auto max-w-2xl">
                         <div class="max-w-lg">
-                            <h1 class="mt-10 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">AI Baby Generator
-                            </h1>
+                            <h1 class="mt-10 lg:mt-0  text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">AI Baby Generator</h1>
                             <p class="mt-6 text-lg leading-8 text-gray-600">Baby Generator predicts baby's appearance using
                                 AI technology. Predict what the baby may look<br>from <span
-                                    class="underline underline-offset-4 decoration-orange-600 decoration-2">parents'
-                                    photos</span>
-                                or <span class="underline underline-offset-4 decoration-orange-600 decoration-2"> 3D
+                                    class=" underline-offset-4 decoration-orange-600 decoration-2">parents'
+                                    photos</span>.
+                                <!-- or <span class="underline underline-offset-4 decoration-orange-600 decoration-2"> 3D
                                     ultrasound
-                                    imaging</span>.</p>
+                                    imaging</span>. -->
+                                </p>
                             <div class="mt-10 flex items-center gap-x-6">
                                 <a href="#"
                                     class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 shrink-0"
                                     @click="()=>handleOpen_('parents')"
                                     >
                                     Predict from parents' photos</a>
-                                <a  @click="()=>handleOpen_()" href="#" class="text-sm font-semibold leading-6 text-gray-900">Predict from 3D
-                                    ultrasound imaging<span aria-hidden="true">→</span></a>
+                                <!-- <a  @click="()=>handleOpen_()" href="#" class="text-sm font-semibold leading-6 text-gray-900">Predict from 3D
+                                    ultrasound imaging<span aria-hidden="true">→</span></a> -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="mt-20 sm:mt-24 md:mx-auto md:max-w-2xl lg:mx-0 lg:mt-0 lg:w-screen">
+                <div class="mt-20 sm:mt-24 md:mx-auto md:max-w-full lg:mx-0 lg:mt-0 lg:w-screen">
                     <div class="absolute inset-y-0 right-1/2 -z-10 -mr-10 w-[200%] skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 md:-mr-20 lg:-mr-36"
                         aria-hidden="true" />
                     <div class="shadow-lg md:rounded-3xl">

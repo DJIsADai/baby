@@ -19,25 +19,29 @@ export const fetchAndStoreImageData = async (newData) => {
   };
   
   //base64转URL
-  export function base64ToBlobUrl(base64Data) {
-    // 将Base64编码的字符串转换为二进制数据
-    const byteString = atob(base64Data.split(',')[1]);
-    // 获取mime类型
-    const mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
-  
-    // 创建一个Uint8Array来存储二进制数据
-    const arrayBuffer = new ArrayBuffer(byteString.length);
-    const uint8Array = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < byteString.length; i++) {
-      uint8Array[i] = byteString.charCodeAt(i);
-    }
-  
-    // 创建Blob对象
-    const blob = new Blob([uint8Array], {type: mimeString});
-  
-    // 创建并返回Blob URL
-    const blobUrl = URL.createObjectURL(blob);
-    return blobUrl;
+export function base64ToBlobUrl(base64Data) {
+   try {
+     // 将Base64编码的字符串转换为二进制数据
+     const byteString = atob(base64Data.split(',')[1]);
+     // 获取mime类型
+     const mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
+   
+     // 创建一个Uint8Array来存储二进制数据
+     const arrayBuffer = new ArrayBuffer(byteString.length);
+     const uint8Array = new Uint8Array(arrayBuffer);
+     for (let i = 0; i < byteString.length; i++) {
+       uint8Array[i] = byteString.charCodeAt(i);
+     }
+   
+     // 创建Blob对象
+     const blob = new Blob([uint8Array], {type: mimeString});
+   
+     // 创建并返回Blob URL
+     const blobUrl = URL.createObjectURL(blob);
+     return blobUrl;
+   } catch (error) {
+    
+   }
   }
 
   //图片转格式
@@ -60,7 +64,7 @@ export function convertFileToBase64(file) {
 }
 
 //图片压缩
-export function resizeImageToMaxSize(file, maxSizeKB = 500) {
+export function resizeImageToMaxSize(file, maxSizeKB = 250) {
   return new Promise((resolve, reject) => {
     if (!file) {
       reject("未提供文件");
@@ -76,7 +80,7 @@ export function resizeImageToMaxSize(file, maxSizeKB = 500) {
       const maxSide = Math.max(width, height);
 
       // 初始调整，确保最长边不超过一个预设的值，例如800px
-      const initialScale = maxSide > 800 ? 800 / maxSide : 1;
+      const initialScale = maxSide > 250 ? 250 / maxSide : 1;
       width *= initialScale;
       height *= initialScale;
 
@@ -129,3 +133,16 @@ export function timestampToYMD(timestamp) {
   
   return formattedDate;
 }
+
+
+// export function handleFileChange_(event) {
+//   const file = event.target.files[0];
+//   if (file) {
+//     const reader = new FileReader();
+//     reader.onload = (e) => {
+//       // e.target.result 是文件的数据URL
+//       imageUrl.value = e.target.result;
+//     };
+//    return  reader.readAsDataURL(file); // 将文件读取为DataURL
+//   }
+// }

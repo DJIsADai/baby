@@ -1,6 +1,6 @@
 <template>
     <header class="absolute z-10 w-full">
-        <nav class="mx-auto flex max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8" aria-label="Global">
+        <nav class="mx-auto flex max-w-6xl items-center justify-between gap-x-6 p-6 lg:px-8" aria-label="Global">
             <div class="flex lg:flex-1">
                 <a href="#" class="-m-1.5 p-1.5 flex items-center">
                     <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
@@ -67,7 +67,8 @@
     <MyOrder :MyOrderOpen="MyOrderOpen" @child-event="handleChildEvent"/>
     <!-- 模态框组件 -->
     <Module :moduleOpen="moduleOpen" @child-event_="handleChildEvent_" :moduleType="moduleType"/>
-
+    <!-- toast -->
+    <!-- <Toast /> -->
 </template>
 
 <script setup>
@@ -78,6 +79,7 @@ import hero from './hero.vue';
 import content from './Content.vue';
 import MyOrder from './components/MyOrder.vue';
 import Module from "./components/Module.vue";
+// import Toast from './components/Toast.vue';
 
 const navigation = [
     { name: 'My Order', href: '#' },
